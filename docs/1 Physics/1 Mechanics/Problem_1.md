@@ -363,4 +363,4 @@ gravity = 9.81             # m/s²
 initial_height = 0         # m
 
 plot_range_vs_angle(initial_velocity, gravity, initial_height)
-```
+``` 
