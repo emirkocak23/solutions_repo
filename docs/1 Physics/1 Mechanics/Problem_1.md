@@ -320,9 +320,13 @@ This section provides a Python implementation to simulate projectile motion, ana
 ---
 
 ## 🐍 Python Code (Jupyter Notebook Compatible)
+![alt text](image-6.png)
+
+---
 
 ![alt text](image.png)
 ---
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -364,3 +368,52 @@ initial_height = 0         # m
 
 plot_range_vs_angle(initial_velocity, gravity, initial_height)
 ``` 
+
+```python
+Gravity constant,
+g = 9.81
+
+Function to compute trajectory,
+def trajectory(v0, angle_deg, num_points=300):
+    angle_rad = np.radians(angle_deg)
+    t_flight = 2 * v0 * np.sin(angle_rad) / g
+    t = np.linspace(0, t_flight, num_points)
+    x = v0 * np.cos(angle_rad) * t
+    y = v0 * np.sin(angle_rad) * t - 0.5 * g * t**2
+    return x, y
+
+Define scenarios,
+cases_a = [(30, 45, '#e74c3c'), (40, 45, '#9b59b6'), (50, 45, '#27ae60')]  # red, purple, green
+cases_b = [(50, 15, '#e74c3c'), (50, 45, '#9b59b6'), (50, 75, '#27ae60')]  # same speed, different angles
+
+Plotting,
+fig, axs = plt.subplots(2, 1, figsize=(12, 10))
+titles = ['(a) Different Speeds at 45°', '(b) Same Speed, Different Angles']
+
+Prettier font,
+plt.rcParams.update({'font.size': 12, 'font.family': 'DejaVu Sans'})
+
+Plot (a),
+for v0, angle, color in cases_a:
+    x, y = trajectory(v0, angle)
+    axs[0].plot(x, y, color=color, linewidth=2, label=f'{v0} m/s')
+axs[0].set_title(titles[0], fontsize=14, weight='bold')
+axs[0].set_xlabel('Range (m)')
+axs[0].set_ylabel('Height (m)')
+axs[0].legend(title='Initial Speed', loc='upper right')
+axs[0].grid(True, linestyle='--', alpha=0.6)
+
+Plot (b),
+for v0, angle, color in cases_b:
+    x, y = trajectory(v0, angle)
+    axs[1].plot(x, y, color=color, linewidth=2, label=f'{angle}°')
+axs[1].set_title(titles[1], fontsize=14, weight='bold')
+axs[1].set_xlabel('Range (m)')
+axs[1].set_ylabel('Height (m)')
+axs[1].legend(title='Launch Angle', loc='upper right')
+axs[1].grid(True, linestyle='--', alpha=0.6)
+
+Tight layout for spacing,
+plt.tight_layout()
+plt.show()
+```
