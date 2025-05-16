@@ -172,6 +172,66 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h1 id="interference-patterns-on-a-water-surface-wave-modeling">🌊 Interference Patterns on a Water Surface – Wave Modeling</h1>
+<h2 id="step-1-choosing-a-regular-polygon">🔷 Step 1: Choosing a Regular Polygon</h2>
+<p>We begin by choosing a <strong>regular polygon</strong> as the geometric base for placing wave sources. In this case, we select a:</p>
+<ul>
+<li><strong>Square</strong>: A 4-sided regular polygon.</li>
+</ul>
+<p>Let the side length be normalized, and the center of the square be located at the origin <span class="arithmatex">\((0,0)\)</span>. Then, the vertices (wave sources) are placed symmetrically around the origin:</p>
+<h3 id="vertex-coordinates-wave-sources">🔹 Vertex Coordinates (Wave Sources)</h3>
+<p>Let the distance from the center to each vertex be <span class="arithmatex">\(R\)</span>. Then the coordinates are:</p>
+<ul>
+<li><span class="arithmatex">\((x_1,y_1) = (R,R)\)</span></li>
+<li><span class="arithmatex">\((x_2,y_2) = (-R,R)\)</span></li>
+<li><span class="arithmatex">\((x_3,y_3) = (-R,-R)\)</span></li>
+<li><span class="arithmatex">\((x_4,y_4) = (R,-R)\)</span></li>
+</ul>
+<p>These correspond to the corners of a square centered at the origin.</p>
+<hr/>
+<h2 id="step-2-define-wave-parameters">📐 Step 2: Define Wave Parameters</h2>
+<p>We define the physical properties of each wave emitted from the sources:</p>
+<ul>
+<li><strong>Amplitude</strong>: <span class="arithmatex">\(A\)</span></li>
+<li><strong>Wavelength</strong>: <span class="arithmatex">\(\lambda\)</span></li>
+<li><strong>Frequency</strong>: <span class="arithmatex">\(f\)</span></li>
+<li><strong>Angular Frequency</strong>:<br/>
+$$
+\omega = 2\pi f
+$$</li>
+<li><strong>Wave Number</strong>:<br/>
+$$
+k = \frac{2\pi}{\lambda}
+$$</li>
+<li><strong>Initial Phase</strong>: <span class="arithmatex">\(\phi\)</span><br/>
+  (Assume same phase for all sources for coherence)</li>
+</ul>
+<hr/>
+<h2 id="step-3-mathematical-model-single-source">🧮 Step 3: Mathematical Model – Single Source</h2>
+<p>The displacement of the water surface at point <span class="arithmatex">\((x,y)\)</span> and time <span class="arithmatex">\(t\)</span> from a single point source located at <span class="arithmatex">\((x_0,y_0)\)</span> is given by:</p>
+<div class="arithmatex">\[
+\eta(x,y,t) = \frac{A}{\sqrt{r}} \cdot \cos\left(kr - \omega t + \phi\right)
+\]</div>
+<p>where</p>
+<ul>
+<li><span class="arithmatex">\(r = \sqrt{(x - x_0)^2 + (y - y_0)^2}\)</span> is the distance from the source to the point <span class="arithmatex">\((x,y)\)</span>,</li>
+<li><span class="arithmatex">\(A\)</span> is the amplitude,</li>
+<li><span class="arithmatex">\(k\)</span> is the wave number,</li>
+<li><span class="arithmatex">\(\omega\)</span> is the angular frequency,</li>
+<li><span class="arithmatex">\(\phi\)</span> is the initial phase.</li>
+</ul>
+<hr/>
+<h2 id="step-4-superposition-from-multiple-sources">📊 Step 4: Superposition from Multiple Sources</h2>
+<p>Since the waves from all sources are <strong>coherent and identical</strong> (same <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(k\)</span>, <span class="arithmatex">\(f\)</span>, and <span class="arithmatex">\(\phi\)</span>), the <strong>total surface displacement</strong> at any point <span class="arithmatex">\((x,y)\)</span> and time <span class="arithmatex">\(t\)</span> is:</p>
+<div class="arithmatex">\[
+\eta_{\text{sum}}(x,y,t) = \sum_{i=1}^{N} \eta_i(x,y,t)
+\]</div>
+<p>For a square, <span class="arithmatex">\(N=4\)</span>, so:</p>
+<div class="arithmatex">\[
+\eta_{\text{sum}}(x,y,t) = \sum_{i=1}^{4} \frac{A}{\sqrt{r_i}} \cdot \cos\left(k r_i - \omega t + \phi\right)
+\]</div>
+<p>where <span class="arithmatex">\(r_i = \sqrt{(x - x_i)^2 + (y - y_i)^2}\)</span> for each source <span class="arithmatex">\(i\)</span>.</p>
+<hr/>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
