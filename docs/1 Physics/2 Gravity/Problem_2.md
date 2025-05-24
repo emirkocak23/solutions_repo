@@ -125,26 +125,83 @@ $$
 
 - Gravitational constant: $G = 6.67430 \times 10^{-11} \, \mathrm{m^3\,kg^{-1}\,s^{-2}}$
 
-### 1️⃣ First Cosmic Velocity – Orbital Velocity
+First Cosmic Velocity: Orbital Velocity,
+Definition: The minimum horizontal velocity needed for an object to enter a stable circular orbit just above the surface of a celestial body without propulsion.,
+Physical Meaning:
+Balances centripetal force and gravitational force.,
+Object "falls around" the planet, never reaching the surface.,
+,
 
-- Equation:
+Derivation:,
+
 $$
-v_1 = \sqrt{\frac{GM}{r}}
+F{\text{gravity}} = F{\text{centripetal}} \
+\frac{GMm}{R^2} = \frac{mv^2}{R}
 $$
 
-### 2️⃣ Second Cosmic Velocity – Escape Velocity
+Solving for velocity $v$:
 
-- Equation:
 $$
-v_2 = \sqrt{\frac{2GM}{r}}
+v = \sqrt{\frac{GM}{R}}
 $$
 
-### 3️⃣ Third Cosmic Velocity – Interstellar Escape (from Sun)
+Where:
+$G$ = Gravitational constant $\approx 6.674 \times 10^{-11}\ \text{Nm}^2/\text{kg}^2$,
+$M$ = Mass of the celestial body,
+$R$ = Radius from the center of the body,
 
-- Equation:
+---
+
+🪐 Second Cosmic Velocity: Escape Velocity,
+Definition: The minimum velocity needed to escape the gravitational field of a celestial body without further propulsion.,
+Physical Meaning:
+Reaches a point at infinity with zero kinetic energy remaining.,
+Not an orbit — a one-way departure from the gravitational pull.,
+,
+
+Derivation:,
+
+From conservation of mechanical energy:
+
 $$
-v_3 = \sqrt{\frac{2GM_{\odot}}{R_{\text{orbit}}}}
+\frac{1}{2}mv^2 - \frac{GMm}{R} = 0
 $$
+
+Solving for $v$:
+
+$$
+v = \sqrt{\frac{2GM}{R}}
+$$
+
+🔎 Note: Escape velocity is $\sqrt{2}$ times the first cosmic velocity.
+
+---
+
+🌞 Third Cosmic Velocity: Solar System Escape Velocity,
+Definition: The minimum velocity required to escape the Sun’s gravitational field starting from a planet’s surface.,
+Physical Meaning:
+Combines:
+Escape velocity from the planet.,
+Additional velocity to escape the Sun’s pull from the planet’s orbit.,
+,
+,
+
+Approximate Formula:,
+
+$$
+v{\text{total}}^2 = v{\text{planet-escape}}^2 + v{\text{sun-orbit}}^2
+$$
+
+Where:
+$v,
+{\text{planet-escape}} = \sqrt{\frac{2GM_p}{Rp}}$
+$v,
+{\text{sun-orbit}} = \sqrt{\frac{2GM_s}{r}}$
+$M_p$: Mass of the planet,
+$R_p$: Radius of the planet,
+$M_s$: Mass of the Sun,
+$r$: Distance from the planet to the Sun
+
 
 ---
 
