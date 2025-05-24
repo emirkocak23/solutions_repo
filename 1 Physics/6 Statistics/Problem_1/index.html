@@ -172,6 +172,227 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h1 id="exploring-the-central-limit-theorem-through-simulation">Exploring the Central Limit Theorem through Simulation</h1>
+<blockquote>
+<p><strong>Project objective:</strong> Build intuitive understanding of the Central Limit Theorem (CLT) by simulating sampling distributions of the sample mean for several population distributions.</p>
+</blockquote>
+<hr/>
+<h2 id="1-mathematical-background">1  Mathematical Background</h2>
+<ul>
+<li><strong>Population mean</strong>:<br/>
+<span class="arithmatex">\(<span class="arithmatex">\(\mu=\mathbb{E}[X]\)</span>\)</span></li>
+<li><strong>Sample mean</strong> (for a sample of size <span class="arithmatex">\(n\)</span>):<br/>
+<span class="arithmatex">\(<span class="arithmatex">\(\bar{X}_n=\frac{1}{n}\sum_{i=1}^{n}X_i\)</span>\)</span></li>
+<li><strong>Central Limit Theorem (one-dimensional form)</strong>:<br/>
+<span class="arithmatex">\(<span class="arithmatex">\(\boxed{\sqrt{n}\,\frac{\bar{X}_n-\mu}{\sigma}\;\xrightarrow{\;d\;}\;\mathcal{N}(0,1)}\)</span>\)</span><br/>
+where <span class="arithmatex">\(\sigma^2=\operatorname{Var}(X)\)</span> and <span class="arithmatex">\(\xrightarrow{\;d\;}\)</span> denotes convergence in distribution.</li>
+</ul>
+<blockquote>
+<p><em>Regardless of the parent distribution</em>, the standardized sample mean approaches the standard normal distribution as <span class="arithmatex">\(n\to\infty\)</span>.</p>
+</blockquote>
+<hr/>
+<h2 id="2-project-road-map">2  Project Road-Map</h2>
+<ol>
+<li><strong>Set up population distributions</strong><br/>
+   • Uniform(<span class="arithmatex">\(a,b\)</span>)<br/>
+   • Exponential(<span class="arithmatex">\(\lambda\)</span>)<br/>
+   • Binomial(<span class="arithmatex">\(N,p\)</span>)<br/>
+   Generate a large synthetic <em>population</em> for each.  </li>
+<li><strong>Sampling &amp; sample-mean computation</strong><br/>
+   • Pick sample sizes <span class="arithmatex">\(n\in\{5,10,30,50\}\)</span>.<br/>
+   • For each distribution &amp; <span class="arithmatex">\(n\)</span>:<br/>
+     – Draw <span class="arithmatex">\(M\)</span> independent samples (e.g. <span class="arithmatex">\(M=10,000\)</span>).<br/>
+     – Compute <span class="arithmatex">\(\bar{X}_n\)</span> for every draw.<br/>
+     – Store the vector of means → <em>sampling distribution</em>.  </li>
+<li><strong>(Next) Visualisation &amp; diagnostics</strong> <em>(placeholder)</em><br/>
+   • Histograms &amp; KDEs of sampling distributions.<br/>
+   • Normal Q–Q plots &amp; Shapiro–Wilk tests.</li>
+</ol>
+<hr/>
+<h2 id="3-python-implementation">3  Python Implementation</h2>
+<p><img alt="alt text" src="../image.png"/></p>
+<pre><code class="language-python"># 📦 Imports
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import norm
+
+# 🎲 Reproducibility
+rng = np.random.default_rng(seed=42)
+
+# 🔧 Simulation parameters
+POP_SIZE = 1_000_000
+M = 10_000
+SAMPLE_SIZES = [5, 10, 30, 50]
+
+# 📊 Create populations
+a, b = 0, 1
+pop_uniform = rng.uniform(a, b, POP_SIZE)
+
+lambd = 1.0
+pop_expon = rng.exponential(1 / lambd, POP_SIZE)
+
+N, p = 10, 0.3
+pop_binom = rng.binomial(N, p, POP_SIZE)
+
+populations = {
+    'Uniform(0,1)': pop_uniform,
+    'Exponential(λ=1)': pop_expon,
+    'Binomial(N=10, p=0.3)': pop_binom,
+}
+
+# 🧮 Helper to draw sample means
+def sample_means(pop, n, m=M):
+    idx = rng.integers(0, len(pop), size=m * n)
+    samples = pop[idx].reshape(m, n)
+    return samples.mean(axis=1)
+
+# 📦 Generate sampling distributions
+sampling_distributions = {}
+for name, pop in populations.items():
+    sampling_distributions[name] = {}
+    for n in SAMPLE_SIZES:
+        sampling_distributions[name][n] = sample_means(pop, n)
+
+# 📊 Plotting function
+def plot_sampling_distributions(sampling_distributions, populations):
+    sns.set(style='whitegrid', palette='muted')
+    fig, axs = plt.subplots(
+        nrows=3, ncols=4, figsize=(20, 12), constrained_layout=True
+    )
+
+    for row_idx, (dist_name, n_dict) in enumerate(sampling_distributions.items()):
+        pop_data = populations[dist_name]
+        mu = np.mean(pop_data)
+        sigma = np.std(pop_data)
+
+        for col_idx, n in enumerate(SAMPLE_SIZES):
+            ax = axs[row_idx, col_idx]
+            sample_means = n_dict[n]
+
+            sns.histplot(sample_means, bins=50, stat='density', kde=False, ax=ax, color='skyblue', edgecolor='black', label='Sample Means')
+
+            # Overlay Normal distribution
+            x = np.linspace(sample_means.min(), sample_means.max(), 200)
+            pdf = norm.pdf(x, loc=mu, scale=sigma / np.sqrt(n))
+            ax.plot(x, pdf, 'r--', lw=2, label='Normal PDF')
+
+            ax.set_title(f'{dist_name}, n={n}', fontsize=11)
+            ax.set_xlabel('Sample Mean')
+            ax.set_ylabel('Density')
+
+            if col_idx == 0:
+                ax.legend()
+
+    fig.suptitle('Central Limit Theorem: Sampling Distributions of the Mean', fontsize=16)
+    plt.show()
+
+# 🔍 Display visualisation
+plot_sampling_distributions(sampling_distributions, populations)
+</code></pre>
+<hr/>
+<h2 id="4-next-steps">4  Next Steps</h2>
+<ul>
+<li><strong>Visualise</strong> each <code>means</code> array with histograms &amp; overlay a normal PDF.  </li>
+<li><strong>Standardise</strong> the sample means:<br/>
+<span class="arithmatex">\(<span class="arithmatex">\(Z=\sqrt{n}\,\frac{\bar{X}_n-\mu}{\sigma}\)</span>\)</span><br/>
+Plot their distribution and compare to <span class="arithmatex">\(\mathcal{N}(0,1)\)</span>.  </li>
+<li><strong>Formal tests</strong>: Kolmogorov–Smirnov or Anderson–Darling goodness-of-fit.</li>
+</ul>
+<p>Feel free to extend or refactor the code – this notebook is meant as a clean, well-commented starting point.</p>
+<hr/>
+<blockquote>
+<p><strong>Citation reminder:</strong> If you use these materials in an academic context, please credit the author(s) appropriately.</p>
+</blockquote>
+<h1 id="visualizing-and-understanding-the-central-limit-theorem-clt">📊 Visualizing and Understanding the Central Limit Theorem (CLT)</h1>
+<h2 id="objective">🎯 Objective</h2>
+<p>Explore how sampling distributions evolve as sample size increases, and reflect on the broader importance of the Central Limit Theorem (CLT) in statistics and real-world applications.</p>
+<hr/>
+<h2 id="4-visualize-sampling-distributions">🔍 4. Visualize Sampling Distributions</h2>
+<p><img alt="alt text" src="../image-1.png"/></p>
+<hr/>
+<p><img alt="alt text" src="../image-2.png"/></p>
+<hr/>
+<h3 id="goal">📌 Goal:</h3>
+<p>To observe how sample means behave when drawn from different population distributions with varying sample sizes.</p>
+<h3 id="approach">📈 Approach:</h3>
+<ul>
+<li>For each population distribution:</li>
+<li>Uniform(0, 1)</li>
+<li>Exponential(λ = 1)</li>
+<li>
+<p>Binomial(N = 10, p = 0.3)</p>
+</li>
+<li>
+<p>For each sample size <span class="arithmatex">\(n \in \{5, 10, 30, 50\}\)</span>:</p>
+</li>
+<li>Draw <span class="arithmatex">\(M = 10{,}000\)</span> random samples</li>
+<li>Compute the sample mean <span class="arithmatex">\(\bar{X}_n\)</span></li>
+<li>Plot a histogram of the resulting sample means</li>
+</ul>
+<h3 id="observation-focus">🧠 Observation Focus:</h3>
+<ul>
+<li>Does the shape of the sampling distribution look approximately normal?</li>
+<li>How does the shape change as <span class="arithmatex">\(n\)</span> increases?</li>
+</ul>
+<h3 id="theoretical-foundation">📐 Theoretical Foundation:</h3>
+<p>Let <span class="arithmatex">\(X_1, X_2, \dots, X_n\)</span> be i.i.d. random variables from a population with:
+- Mean <span class="arithmatex">\(\mu\)</span>
+- Variance <span class="arithmatex">\(\sigma^2\)</span></p>
+<p>Then the <strong>sample mean</strong> is:</p>
+<div class="arithmatex">\[
+\bar{X}_n = \frac{1}{n} \sum_{i=1}^n X_i
+\]</div>
+<p>According to the <strong>Central Limit Theorem</strong>:</p>
+<div class="arithmatex">\[
+\sqrt{n} \cdot \frac{\bar{X}_n - \mu}{\sigma} \xrightarrow{d} \mathcal{N}(0, 1)
+\]</div>
+<p>As <span class="arithmatex">\(n \to \infty\)</span>, the sampling distribution of <span class="arithmatex">\(\bar{X}_n\)</span> approaches a normal distribution <span class="arithmatex">\(\mathcal{N}(\mu, \sigma^2/n)\)</span>.</p>
+<hr/>
+<h2 id="5-analyze-and-explore-parameters">🔬 5. Analyze and Explore Parameters</h2>
+<h3 id="questions-to-investigate">❓ Questions to Investigate:</h3>
+<ul>
+<li>How quickly do the sampling distributions become approximately normal for each population?</li>
+<li>How does <strong>sample size</strong> influence the <strong>spread</strong> and <strong>shape</strong> of the distribution?</li>
+<li>What is the role of <strong>population variance</strong> <span class="arithmatex">\(\sigma^2\)</span> on the width of the sampling distribution?</li>
+</ul>
+<h3 id="key-relationships">📏 Key Relationships:</h3>
+<ul>
+<li><strong>Spread of the sampling distribution</strong>:</li>
+</ul>
+<div class="arithmatex">\[
+\operatorname{Var}(\bar{X}_n) = \frac{\sigma^2}{n}
+\]</div>
+<p>So, larger <span class="arithmatex">\(n\)</span> leads to narrower (more concentrated) distributions of <span class="arithmatex">\(\bar{X}_n\)</span>.</p>
+<ul>
+<li><strong>Skewness and Convergence</strong>:</li>
+<li>Highly skewed populations (like Exponential) require <strong>larger <span class="arithmatex">\(n\)</span></strong> to exhibit normality in <span class="arithmatex">\(\bar{X}_n\)</span></li>
+<li>Symmetric distributions (like Uniform) converge to normal shape <strong>more quickly</strong></li>
+</ul>
+<hr/>
+<h2 id="6-reflect-on-real-world-applications">🌍 6. Reflect on Real-World Applications</h2>
+<p>The Central Limit Theorem is essential in many fields:</p>
+<h3 id="1-estimating-unknown-parameters">🧪 1. Estimating Unknown Parameters</h3>
+<ul>
+<li>Enables confidence intervals and hypothesis tests using sample statistics</li>
+<li>Even if population is non-normal, <span class="arithmatex">\(\bar{X}_n\)</span> is approximately normal for large <span class="arithmatex">\(n\)</span></li>
+</ul>
+<h3 id="2-manufacturing-quality-control">🏭 2. Manufacturing Quality Control</h3>
+<ul>
+<li>Sampling the number of defective products from a batch</li>
+<li>Use sample means to detect deviations from target quality</li>
+</ul>
+<h3 id="3-financial-modeling">💹 3. Financial Modeling</h3>
+<ul>
+<li>Average returns over time intervals</li>
+<li>Risk assessment using aggregated asset behavior</li>
+</ul>
+<hr/>
+<blockquote>
+<p>📚 <strong>Conclusion</strong>:
+The CLT provides a powerful theoretical foundation that justifies using normal models in real-world data analysis. It assures us that sample averages behave predictably even when individual data points do not.</p>
+</blockquote>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
