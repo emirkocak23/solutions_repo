@@ -296,27 +296,64 @@ v_{3,\text{from Earth}} = v_3 - v_{\text{Earth orbit}}
 <ul>
 <li>Gravitational constant: <span class="arithmatex">\(G = 6.67430 \times 10^{-11} \, \mathrm{m^3\,kg^{-1}\,s^{-2}}\)</span></li>
 </ul>
-<h3 id="1-first-cosmic-velocity-orbital-velocity_1">1️⃣ First Cosmic Velocity – Orbital Velocity</h3>
-<ul>
-<li>Equation:
-$$
-v_1 = \sqrt{\frac{GM}{r}}
-$$</li>
-</ul>
-<h3 id="2-second-cosmic-velocity-escape-velocity_1">2️⃣ Second Cosmic Velocity – Escape Velocity</h3>
-<ul>
-<li>Equation:
-$$
-v_2 = \sqrt{\frac{2GM}{r}}
-$$</li>
-</ul>
-<h3 id="3-third-cosmic-velocity-interstellar-escape-from-sun">3️⃣ Third Cosmic Velocity – Interstellar Escape (from Sun)</h3>
-<ul>
-<li>Equation:
-$$
-v_3 = \sqrt{\frac{2GM_{\odot}}{R_{\text{orbit}}}}
-$$</li>
-</ul>
+<p>First Cosmic Velocity: Orbital Velocity,
+Definition: The minimum horizontal velocity needed for an object to enter a stable circular orbit just above the surface of a celestial body without propulsion.,
+Physical Meaning:
+Balances centripetal force and gravitational force.,
+Object "falls around" the planet, never reaching the surface.,
+,</p>
+<p>Derivation:,</p>
+<div class="arithmatex">\[
+F{\text{gravity}} = F{\text{centripetal}} \
+\frac{GMm}{R^2} = \frac{mv^2}{R}
+\]</div>
+<p>Solving for velocity <span class="arithmatex">\(v\)</span>:</p>
+<div class="arithmatex">\[
+v = \sqrt{\frac{GM}{R}}
+\]</div>
+<p>Where:
+<span class="arithmatex">\(G\)</span> = Gravitational constant <span class="arithmatex">\(\approx 6.674 \times 10^{-11}\ \text{Nm}^2/\text{kg}^2\)</span>,
+<span class="arithmatex">\(M\)</span> = Mass of the celestial body,
+<span class="arithmatex">\(R\)</span> = Radius from the center of the body,</p>
+<hr/>
+<p>🪐 Second Cosmic Velocity: Escape Velocity,
+Definition: The minimum velocity needed to escape the gravitational field of a celestial body without further propulsion.,
+Physical Meaning:
+Reaches a point at infinity with zero kinetic energy remaining.,
+Not an orbit — a one-way departure from the gravitational pull.,
+,</p>
+<p>Derivation:,</p>
+<p>From conservation of mechanical energy:</p>
+<div class="arithmatex">\[
+\frac{1}{2}mv^2 - \frac{GMm}{R} = 0
+\]</div>
+<p>Solving for <span class="arithmatex">\(v\)</span>:</p>
+<div class="arithmatex">\[
+v = \sqrt{\frac{2GM}{R}}
+\]</div>
+<p>🔎 Note: Escape velocity is <span class="arithmatex">\(\sqrt{2}\)</span> times the first cosmic velocity.</p>
+<hr/>
+<p>🌞 Third Cosmic Velocity: Solar System Escape Velocity,
+Definition: The minimum velocity required to escape the Sun’s gravitational field starting from a planet’s surface.,
+Physical Meaning:
+Combines:
+Escape velocity from the planet.,
+Additional velocity to escape the Sun’s pull from the planet’s orbit.,
+,
+,</p>
+<p>Approximate Formula:,</p>
+<div class="arithmatex">\[
+v{\text{total}}^2 = v{\text{planet-escape}}^2 + v{\text{sun-orbit}}^2
+\]</div>
+<p>Where:
+<span class="arithmatex">\(v,
+{\text{planet-escape}} = \sqrt{\frac{2GM_p}{Rp}}\)</span>
+<span class="arithmatex">\(v,
+{\text{sun-orbit}} = \sqrt{\frac{2GM_s}{r}}\)</span>
+<span class="arithmatex">\(M_p\)</span>: Mass of the planet,
+<span class="arithmatex">\(R_p\)</span>: Radius of the planet,
+<span class="arithmatex">\(M_s\)</span>: Mass of the Sun,
+<span class="arithmatex">\(r\)</span>: Distance from the planet to the Sun</p>
 <hr/>
 <h2 id="parameters">🧠 Parameters</h2>
 <ul>
