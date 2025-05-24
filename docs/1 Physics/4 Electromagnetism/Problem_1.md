@@ -62,67 +62,82 @@ $$\mathbf{v}_{\text{drift}} = \frac{\mathbf{E} \times \mathbf{B}}{B^2}$$
 
 ## 📊 3D Trajectory Visualization
 
-![alt text](image.png)
+![alt text](image-2.png)
 
 ---
 
+![alt text](image-3.png)
+
+---
+
+![alt text](image-4.png)
+
+---
+
+
 ```python
+# ✅ Import libraries
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# Physical constants
-q = 1.6e-19  # charge (Coulombs)
-m = 9.11e-31  # mass (kg) - electron mass
+# ========================== 1. Circular Motion (2D Gradient) ==========================
+t1 = np.linspace(0, 10, 500)
+r = 1
+x1 = r * np.cos(t1)
+y1 = r * np.sin(t1)
 
-# Fields
-E = np.array([0, 0, 1e5])  # electric field (V/m) along z
-B = np.array([0, 1, 0])    # magnetic field (T) along y
+plt.figure(figsize=(7,6))
+plt.title('1️⃣ Circular Motion (Plasma Gradient)', fontsize=14, weight='bold')
+scatter1 = plt.scatter(x1, y1, c=t1, cmap='plasma', s=5)
+plt.plot(x1, y1, alpha=0.2, color='gray')
+plt.plot(x1[0], y1[0], 'go', label='Start')
+plt.plot(x1[-1], y1[-1], 'ro', label='End')
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
+plt.colorbar(scatter1, label='Time (s)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
 
-# Initial conditions
-r0 = np.array([0, 0, 0])    # initial position (m)
-v0 = np.array([1e5, 0, 0])  # initial velocity (m/s)
+# ========================== 2. Helical Motion (3D Gradient) ==========================
+t2 = np.linspace(0, 10, 500)
+x2 = np.cos(t2)
+y2 = np.sin(t2)
+z2 = t2**1.2
 
-# Time parameters
-dt = 1e-9
-N = 1000
-t = np.linspace(0, N*dt, N)
+fig = plt.figure(figsize=(8,6))
+ax2 = fig.add_subplot(111, projection='3d')
+ax2.set_title('2️⃣ Helical Motion (Cividis Gradient)', fontsize=14, weight='bold')
+scatter2 = ax2.scatter(x2, y2, z2, c=t2, cmap='cividis', s=5)
+ax2.plot(x2, y2, z2, color='gray', alpha=0.2)
+ax2.scatter(x2[0], y2[0], z2[0], color='lime', s=40, label='Start')
+ax2.scatter(x2[-1], y2[-1], z2[-1], color='red', s=40, label='End')
+ax2.set_xlabel('x (m)')
+ax2.set_ylabel('y (m)')
+ax2.set_zlabel('z (m)')
+fig.colorbar(scatter2, ax=ax2, label='Time (s)')
+ax2.legend()
+plt.tight_layout()
+plt.show()
 
-# Arrays to store position and velocity
-r = np.zeros((N, 3))
-v = np.zeros((N, 3))
-r[0] = r0
-v[0] = v0
+# ========================== 3. Drift Motion (E x B Drift) ==========================
+t3 = np.linspace(0, 10 * np.pi, 1000)
+x3 = t3 / 10
+y3 = np.sin(t3)
+z3 = np.zeros_like(t3)
 
-# Lorentz force update loop
-for i in range(N - 1):
-    F = q * (E + np.cross(v[i], B))
-    a = F / m
-    v[i + 1] = v[i] + a * dt
-    r[i + 1] = r[i] + v[i + 1] * dt
-
-# Plotting with color gradient and visible dots
-fig = plt.figure(figsize=(10, 7))
-ax = fig.add_subplot(111, projection='3d')
-
-# Color gradient along trajectory
-colors = plt.cm.plasma(np.linspace(0, 1, N))
-
-# Plot each segment with corresponding color and dot
-for i in range(N - 1):
-    ax.plot(r[i:i+2, 0], r[i:i+2, 1], r[i:i+2, 2], color=colors[i], lw=2)
-    ax.scatter(r[i, 0], r[i, 1], r[i, 2], color=colors[i], s=15)
-
-# Label axes and title
-ax.set_xlabel('x (m)')
-ax.set_ylabel('y (m)')
-ax.set_zlabel('z (m)')
-ax.set_title('3D Trajectory of a Charged Particle in Electric and Magnetic Fields')
-
-# Set grid and view angle for better 3D perception
-ax.grid(True)
-ax.view_init(elev=25, azim=120)
-
+fig = plt.figure(figsize=(8,6))
+ax3 = fig.add_subplot(111, projection='3d')
+ax3.set_title('3️⃣ E × B Drift Motion (Orange Line)', fontsize=14, weight='bold')
+ax3.plot(x3, y3, z3, color='orange', linewidth=2, label='Drift Path')
+ax3.scatter(x3[0], y3[0], z3[0], color='lime', s=40, label='Start')
+ax3.scatter(x3[-1], y3[-1], z3[-1], color='red', s=40, label='End')
+ax3.set_xlabel('x (m)')
+ax3.set_ylabel('y (m)')
+ax3.set_zlabel('z (m)')
+ax3.legend()
 plt.tight_layout()
 plt.show()
 ```
