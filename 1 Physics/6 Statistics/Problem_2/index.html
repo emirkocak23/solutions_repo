@@ -172,6 +172,379 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-2">Problem 2</h1>
+<h1 id="estimating-using-monte-carlo-simulation-circle-method">🧠 Estimating π Using Monte Carlo Simulation (Circle Method)</h1>
+<h2 id="1-theoretical-foundation">1. 🎓 Theoretical Foundation</h2>
+<p>Monte Carlo methods estimate values using random sampling and probabilistic principles. In this method, we use a <strong>unit circle</strong> inscribed in a <strong>square</strong> to estimate the value of π.</p>
+<h3 id="geometric-principle">🔷 Geometric Principle</h3>
+<ul>
+<li>Consider a <strong>unit circle</strong> of radius 1 centered at the origin.</li>
+<li>Enclose it in a <strong>square</strong> with side length 2 (ranging from -1 to 1 on both x and y axes).</li>
+<li>Generate random points <span class="arithmatex">\((x, y)\)</span> uniformly inside the square.</li>
+<li>Count how many points fall <strong>inside the circle</strong> using the condition:</li>
+</ul>
+<div class="arithmatex">\[
+x^2 + y^2 \leq 1
+\]</div>
+<ul>
+<li>The area of the circle is:</li>
+</ul>
+<div class="arithmatex">\[
+A_{\text{circle}} = \pi r^2 = \pi \cdot 1^2 = \pi
+\]</div>
+<ul>
+<li>The area of the square is:</li>
+</ul>
+<div class="arithmatex">\[
+A_{\text{square}} = (2r)^2 = 4
+\]</div>
+<ul>
+<li>The ratio of the areas gives the <strong>probability</strong> that a random point falls inside the circle:</li>
+</ul>
+<div class="arithmatex">\[
+\frac{\text{Points inside circle}}{\text{Total points}} \approx \frac{\pi}{4}
+\]</div>
+<ul>
+<li>Solving for π:</li>
+</ul>
+<div class="arithmatex">\[
+\pi \approx 4 \cdot \frac{\text{Points inside circle}}{\text{Total points}}
+\]</div>
+<hr/>
+<h2 id="2-simulation">2. 🧪 Simulation</h2>
+<p><img alt="alt text" src="../monte_carlo_pi.gif"/></p>
+<hr/>
+<p><img alt="alt text" src="../image-3.png"/></p>
+<hr/>
+<p>Below is the Python code to implement this method and estimate the value of π.</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Number of random points
+N = 10000
+
+# Generate N random points in the square [-1, 1] x [-1, 1]
+x = np.random.uniform(-1, 1, N)
+y = np.random.uniform(-1, 1, N)
+
+# Compute distance from origin for each point
+distance_squared = x**2 + y**2
+
+# Count how many points fall inside the unit circle
+inside_circle = distance_squared &lt;= 1
+count_inside = np.sum(inside_circle)
+
+# Estimate π
+pi_estimate = 4 * count_inside / N
+print(f"Estimated π ≈ {pi_estimate}")
+
+# Visualization
+plt.figure(figsize=(6,6))
+plt.scatter(x[inside_circle], y[inside_circle], color='blue', s=1, label='Inside Circle')
+plt.scatter(x[~inside_circle], y[~inside_circle], color='red', s=1, label='Outside Circle')
+circle = plt.Circle((0, 0), 1, color='black', fill=False, linewidth=2)
+plt.gca().add_patch(circle)
+plt.axhline(0, color='gray', linestyle='--')
+plt.axvline(0, color='gray', linestyle='--')
+plt.gca().set_aspect('equal')
+plt.title(f"Monte Carlo Estimation of π (N={N})")
+plt.legend()
+plt.xlabel("x")
+plt.ylabel("y")
+plt.grid(True)
+plt.show()
+</code></pre>
+<hr/>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation, PillowWriter
+from IPython.display import Image, display
+
+# Generate N random points
+N = 1000
+step = 10  # number of points added per frame
+
+x = np.random.uniform(-1, 1, N)
+y = np.random.uniform(-1, 1, N)
+distance_squared = x**2 + y**2
+inside_circle = distance_squared &lt;= 1
+
+# Setup figure
+fig, ax = plt.subplots(figsize=(6, 6))
+sc_inside = ax.scatter([], [], color='deepskyblue', s=6, alpha=0.7, label='Inside Circle')
+sc_outside = ax.scatter([], [], color='crimson', s=6, alpha=0.7, label='Outside Circle')
+
+# Add unit circle
+circle = plt.Circle((0, 0), 1, color='black', fill=False, linewidth=2)
+ax.add_patch(circle)
+
+# Format plot
+ax.set_xlim(-1, 1)
+ax.set_ylim(-1, 1)
+ax.set_aspect('equal')
+ax.set_xlabel("x", fontsize=12)
+ax.set_ylabel("y", fontsize=12)
+ax.set_title("Monte Carlo Estimation of π", fontsize=14)
+ax.legend(loc='upper right', fontsize=10)
+ax.grid(True)
+
+# Update function for animation
+def update(frame):
+    idx = (frame + 1) * step
+    x_in = x[inside_circle][:idx]
+    y_in = y[inside_circle][:idx]
+    x_out = x[~inside_circle][:idx]
+    y_out = y[~inside_circle][:idx]
+
+    sc_inside.set_offsets(np.column_stack((x_in, y_in)))
+    sc_outside.set_offsets(np.column_stack((x_out, y_out)))
+
+    total = len(x_in) + len(x_out)
+    pi_estimate = 4 * len(x_in) / total if total &gt; 0 else 0
+    ax.set_title(f"Monte Carlo Estimation of π\nPoints: {total}, π ≈ {pi_estimate:.5f}", fontsize=14)
+
+# Create animation
+frames = N // step
+ani = FuncAnimation(fig, update, frames=frames, interval=50, repeat=False)
+
+# Save the animation as a GIF
+ani.save("monte_carlo_pi.gif", writer=PillowWriter(fps=20))
+
+# Display the GIF inline
+display(Image(filename="monte_carlo_pi.gif"))
+</code></pre>
+<hr/>
+<h2 id="summary">✅ Summary</h2>
+<ul>
+<li>We used <strong>uniform random sampling</strong> within a square to approximate the value of π.</li>
+<li>The <strong>ratio of points inside the circle</strong> to the total number gives us a way to estimate π using:</li>
+</ul>
+<div class="arithmatex">\[
+\pi \approx 4 \cdot \frac{\text{Points inside}}{\text{Total points}}
+\]</div>
+<ul>
+<li>Increasing the number of points improves the accuracy due to the <strong>law of large numbers</strong>.</li>
+</ul>
+<h1 id="theoretical-foundation-buffons-needle-problem">🧠 Theoretical Foundation: Buffon’s Needle Problem</h1>
+<h2 id="problem-setup">📖 Problem Setup</h2>
+<p>Buffon’s Needle is a classic probability problem posed by Georges-Louis Leclerc, Comte de Buffon in the 18th century. It presents a simple yet profound way to estimate the value of <span class="arithmatex">\(\pi\)</span> using randomness and geometry.</p>
+<ul>
+<li>Imagine a plane with <strong>equally spaced parallel lines</strong> a distance <span class="arithmatex">\(t\)</span> apart.</li>
+<li>A needle of length <span class="arithmatex">\(L\)</span> (where <span class="arithmatex">\(L \leq t\)</span>) is randomly dropped onto this plane.</li>
+<li>We repeat this process <span class="arithmatex">\(N\)</span> times and observe how many times the needle crosses a line.</li>
+</ul>
+<p>This stochastic process can be used to estimate the value of <span class="arithmatex">\(\pi\)</span> based on the <strong>probability of a crossing</strong>.</p>
+<hr/>
+<h2 id="derivation-of-the-formula">🧮 Derivation of the Formula</h2>
+<p>Let:
+- <span class="arithmatex">\(L\)</span> = length of the needle<br/>
+- <span class="arithmatex">\(t\)</span> = distance between lines (assume <span class="arithmatex">\(L \leq t\)</span>)<br/>
+- <span class="arithmatex">\(N\)</span> = number of needle drops<br/>
+- <span class="arithmatex">\(C\)</span> = number of times the needle crosses a line  </p>
+<p>The <strong>probability</strong> that a single needle will cross a line is given by:</p>
+<div class="arithmatex">\[
+P = \frac{2L}{t\pi}
+\]</div>
+<p>Hence, if we drop <span class="arithmatex">\(N\)</span> needles and observe <span class="arithmatex">\(C\)</span> crossings, we estimate <span class="arithmatex">\(P \approx \frac{C}{N}\)</span>. Rearranging the equation to solve for <span class="arithmatex">\(\pi\)</span>:</p>
+<div class="arithmatex">\[
+\pi \approx \frac{2L \cdot N}{t \cdot C}
+\]</div>
+<hr/>
+<h2 id="simulation-steps">🛠️ Simulation Steps</h2>
+<p>To perform the Monte Carlo simulation of Buffon’s Needle:</p>
+<ol>
+<li><strong>Randomly drop <span class="arithmatex">\(N\)</span> needles</strong>:</li>
+<li>For each needle, generate:</li>
+<li>A random distance from the center of the needle to the nearest line:<br/>
+$$
+y \in [0, t/2]
+$$</li>
+<li>
+<p>A random angle <span class="arithmatex">\(\theta\)</span> between the needle and the parallel lines:<br/>
+$$
+\theta \in [0, \pi/2]
+$$</p>
+</li>
+<li>
+<p><strong>Determine if a needle crosses a line</strong>:</p>
+</li>
+<li>
+<p>A needle crosses a line if the vertical projection from its center exceeds <span class="arithmatex">\(y\)</span>, i.e.:
+$$
+\frac{L}{2} \sin(\theta) \geq y
+$$</p>
+</li>
+<li>
+<p><strong>Count the number of crossings</strong> <span class="arithmatex">\(C\)</span>.</p>
+</li>
+<li>
+<p><strong>Estimate <span class="arithmatex">\(\pi\)</span></strong> using the derived formula:
+$$
+\pi \approx \frac{2L \cdot N}{t \cdot C}
+$$</p>
+</li>
+</ol>
+<hr/>
+<h2 id="important-notes">📌 Important Notes</h2>
+<ul>
+<li>For accurate results, ensure <span class="arithmatex">\(L \leq t\)</span>.</li>
+<li>The larger the number of trials <span class="arithmatex">\(N\)</span>, the more accurate the approximation of <span class="arithmatex">\(\pi\)</span> becomes.</li>
+<li>Buffon's Needle illustrates the deep connection between <strong>geometry</strong>, <strong>probability</strong>, and <strong>mathematical constants</strong> like <span class="arithmatex">\(\pi\)</span>.</li>
+</ul>
+<h1 id="visualization-of-buffons-needle-simulation">🎨 Visualization of Buffon's Needle Simulation</h1>
+<p><img alt="alt text" src="../buffon_simulation.gif"/></p>
+<hr/>
+<p><img alt="alt text" src="../image-4.png"/></p>
+<hr/>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib.animation import PillowWriter
+
+# Parameters
+L = 0.9        # Needle length
+t = 1.0        # Distance between lines
+N = 200        # Number of needle drops
+line_count = 10  # Number of parallel lines
+
+# Generate random needle centers and angles
+x_centers = np.random.uniform(0, line_count, N)
+y_centers = np.random.uniform(0, line_count, N)
+angles = np.random.uniform(0, np.pi, N)
+
+# Calculate needle endpoints
+dx = (L / 2) * np.cos(angles)
+dy = (L / 2) * np.sin(angles)
+x1 = x_centers - dx
+x2 = x_centers + dx
+y1 = y_centers - dy
+y2 = y_centers + dy
+
+# Determine crossings
+crossings = (np.floor(y1 / t) != np.floor(y2 / t))
+
+# Set up figure and axes
+fig, ax = plt.subplots(figsize=(8, 8))
+
+# Initialize plot
+def init():
+    ax.set_xlim(0, line_count)
+    ax.set_ylim(0, line_count)
+    ax.set_aspect('equal')
+    ax.set_xlabel("x-position")
+    ax.set_ylabel("y-position")
+    ax.set_title("Buffon's Needle Simulation\nGreen = Crosses Line, Red = Doesn't Cross", fontsize=14)
+    ax.grid(True)
+    for i in range(line_count + 1):
+        ax.axhline(i * t, color='gray', linestyle='--', linewidth=1)
+    return []
+
+# Update function for animation
+def update(frame):
+    color = 'green' if crossings[frame] else 'red'
+    ax.plot([x1[frame], x2[frame]], [y1[frame], y2[frame]], color=color, alpha=0.7)
+    return []
+
+# Create animation
+ani = animation.FuncAnimation(fig, update, frames=N, init_func=init, blit=False, interval=50, repeat=False)
+
+# Save as GIF
+gif_path = "/content/buffon_simulation.gif"
+ani.save(gif_path, writer=PillowWriter(fps=20))
+
+print("GIF saved to:", gif_path)
+</code></pre>
+<hr/>
+<h2 id="geometric-representation">🖼️ Geometric Representation</h2>
+<p>To visually understand how Buffon’s Needle estimates π, we simulate and plot:</p>
+<ul>
+<li><strong>Equally spaced parallel lines</strong> a distance <span class="arithmatex">\(t\)</span> apart, running horizontally.</li>
+<li><strong>Randomly dropped needles</strong>, each with:</li>
+<li>A center point <span class="arithmatex">\((x, y)\)</span> within the simulation area.</li>
+<li>A random orientation angle <span class="arithmatex">\(\theta\)</span>.</li>
+<li>Two endpoints computed using:
+$$
+\text{end}_1 = \left(x - \frac{L}{2} \cos\theta,\ y - \frac{L}{2} \sin\theta\right)
+$$
+$$
+\text{end}_2 = \left(x + \frac{L}{2} \cos\theta,\ y + \frac{L}{2} \sin\theta\right)
+$$</li>
+</ul>
+<h2 id="visual-features">🔍 Visual Features</h2>
+<ul>
+<li><strong>Parallel lines</strong>: drawn as horizontal gray or black lines at <span class="arithmatex">\(y = nt\)</span> for integer <span class="arithmatex">\(n\)</span>.</li>
+<li><strong>Needles that cross a line</strong>:</li>
+<li>Highlighted in <strong>green</strong>.</li>
+<li><strong>Needles that do not cross</strong>:</li>
+<li>Shown in <strong>red</strong> or another contrasting color.</li>
+<li>Use <strong>alpha transparency</strong> and <strong>thin lines</strong> to reduce visual clutter.</li>
+</ul>
+<hr/>
+<h1 id="analysis-of-estimation-accuracy">📊 Analysis of Estimation Accuracy</h1>
+<h2 id="effect-of-number-of-drops-n">📈 Effect of Number of Drops (<span class="arithmatex">\(N\)</span>)</h2>
+<p>As with many Monte Carlo methods, the accuracy of the π estimate improves with more trials:</p>
+<ul>
+<li>For small <span class="arithmatex">\(N\)</span>, the estimate fluctuates significantly due to randomness.</li>
+<li>For large <span class="arithmatex">\(N\)</span>, the estimate <strong>converges slowly</strong> toward the true value of <span class="arithmatex">\(\pi\)</span>.</li>
+<li>The convergence is <strong>statistical</strong> and exhibits <strong>variance</strong>, roughly decreasing with:
+$$
+\text{Error} \propto \frac{1}{\sqrt{N}}
+ $$</li>
+</ul>
+<h2 id="comparison-to-circle-based-monte-carlo">🔁 Comparison to Circle-Based Monte Carlo</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Buffon’s Needle</th>
+<th>Circle Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Geometry</td>
+<td>Lines and needles</td>
+<td>Square and inscribed circle</td>
+</tr>
+<tr>
+<td>π Formula</td>
+<td><span class="arithmatex">\(\pi \approx \frac{2L \cdot N}{t \cdot C}\)</span></td>
+<td><span class="arithmatex">\(\pi \approx 4 \cdot \frac{\text{points inside circle}}{\text{total points}}\)</span></td>
+</tr>
+<tr>
+<td>Convergence Rate</td>
+<td>Slow</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>Visual Intuition</td>
+<td>Strong</td>
+<td>Very strong</td>
+</tr>
+<tr>
+<td>Computational Simplicity</td>
+<td>Moderate</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Accuracy (at same <span class="arithmatex">\(N\)</span>)</td>
+<td>Typically lower</td>
+<td>Typically higher</td>
+</tr>
+</tbody>
+</table>
+<h2 id="recommendations">📌 Recommendations</h2>
+<ul>
+<li>Use Buffon’s method to teach <strong>geometric probability</strong>.</li>
+<li>For practical Monte Carlo π estimation, prefer the <strong>circle method</strong> for faster convergence and simpler implementation.</li>
+<li>Combine visual outputs with <strong>π vs. <span class="arithmatex">\(N\)</span> convergence plots</strong> for deeper insight.</li>
+</ul>
+<hr/>
+<h2 id="optional-extensions">📉 Optional Extensions</h2>
+<ul>
+<li>Plot a curve showing <span class="arithmatex">\(\pi\)</span> estimates as a function of <span class="arithmatex">\(N\)</span>.</li>
+<li>Overlay a line showing the true value <span class="arithmatex">\(\pi \approx 3.14159\)</span> for visual comparison.</li>
+<li>Compute standard deviation of estimates over multiple runs.</li>
+</ul>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
