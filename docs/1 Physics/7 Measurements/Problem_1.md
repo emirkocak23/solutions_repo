@@ -41,7 +41,7 @@ $$\Delta L = \frac{0.001\,\text{m}}{2} = 0.0005\,\text{m}$$
 ## 📊 3. Data Collection
 
 
-![alt text](image.png)
+![alt text](<Ekran görüntüsü 2025-06-04 024804.png>)
 
 ---
 
