@@ -1,25 +1,21 @@
-# Problem 1
+# 🌍 Deriving Masses and Cosmic Velocities Using Kepler’s Laws
 
-# 📘 Problem 1: Orbital Period and Orbital Radius
+## 📘 Problem 1: Mass Determination via Kepler’s Third Law
 
-## 🧠 Derivation of Kepler's Third Law for Circular Orbits
+### 🧠 Kepler’s Third Law for Circular Orbits
 
-Kepler's Third Law states:
+> **"The square of the orbital period ($T$) is proportional to the cube of the orbital radius ($r$)."**
 
-> **The square of the orbital period ($T$) of a planet is directly proportional to the cube of the semi-major axis ($r$) of its orbit.**
+Derived using Newton’s Law of Gravitation and centripetal motion:
 
-For **circular orbits**, the derivation proceeds from **Newton’s Law of Gravitation** and **centripetal force**:
+#### Step 1: Equating Forces
 
-### 1. Equating Gravitational and Centripetal Forces
-
-- Gravitational force:
-
+Gravitational force:
 $$
 F_g = \frac{GMm}{r^2}
 $$
 
-- Centripetal force:
-
+Centripetal force:
 $$
 F_c = \frac{mv^2}{r}
 $$
@@ -30,66 +26,60 @@ $$
 \frac{GMm}{r^2} = \frac{mv^2}{r}
 $$
 
-Mass $m$ cancels:
-
-$$
-\frac{GM}{r^2} = \frac{v^2}{r}
-$$
-
-Solve for orbital velocity $v$:
-
+Cancel $m$, solve for $v$:
 $$
 v = \sqrt{\frac{GM}{r}}
 $$
 
-### 2. Orbital Period from Velocity
+#### Step 2: Expression for Orbital Period
 
-The orbital period $T$ is:
-
+Orbital period:
 $$
-T = \frac{2\pi r}{v}
-$$
-
-Substitute $v$:
-
-$$
-T = \frac{2\pi r}{\sqrt{\frac{GM}{r}}} = 2\pi \sqrt{\frac{r^3}{GM}}
+T = \frac{2\pi r}{v} = 2\pi \sqrt{\frac{r^3}{GM}}
 $$
 
-### ✅ Final Result (Kepler’s Third Law):
-
+✅ **Kepler’s Third Law (Final Form):**
 $$
-T^2 = \frac{4\pi^2}{GM}r^3 \Rightarrow T^2 \propto r^3
+T^2 = \frac{4\pi^2}{GM}r^3
 $$
 
 ---
 
-## 🌌 Significance of the $T^2 \propto r^3$ Relationship
+### 🌍 Mass of the Earth via Moon’s Orbit
 
-- Helps determine **distances** of planets from stars.
-- Enables estimation of **masses** of celestial bodies.
-- Crucial in calculating **satellite orbits**, **spacecraft trajectories**.
-- Valid for **any object orbiting under gravity** in a central field.
+Rearranging Kepler’s Law:
+$$
+M = \frac{4\pi^2 r^3}{G T^2}
+$$
+
+Given:
+- $r = 3.84 \times 10^8$ m  
+- $T = 27.3$ days = $2.36 \times 10^6$ s  
+- $G = 6.67430 \times 10^{-11}$ m³/kg·s²
+
+Plug values:
+$$
+M_\text{Earth} \approx 5.97 \times 10^{24} \, \text{kg}
+$$
 
 ---
 
-## 🌍 Real-World Applications
+### ☀️ Mass of the Sun via Earth’s Orbit
 
-Examples where Kepler's Law applies:
+Given:
+- $r = 1.496 \times 10^{11}$ m  
+- $T = 1$ year = $3.154 \times 10^7$ s  
 
-- **Moon around Earth**  
-$r = 3.84 \times 10^8$ m, $T = 27.3$ days
-
-- **Planets in Solar System**  
-  Approximate relation holds:
-- $T^2 \propto r^3$
-- $T$ in Earth years, $r$ in AU
+Apply the same formula:
+$$
+M_\text{Sun} = \frac{4\pi^2 r^3}{G T^2} \approx 1.99 \times 10^{30} \, \text{kg}
+$$
 
 ---
 
 ## 🧪 Python Simulation of Circular Orbits
 
-![alt text](image.png)
+![alt text](image-13.png)
 
 ---
 
@@ -147,128 +137,59 @@ plt.legend(by_label.values(), by_label.keys(), fontsize=8, loc='upper left')
 plt.tight_layout()
 plt.show()
 ```
----
+## 🚀 Problem 2: Cosmic Velocities
 
-# 📘 Problem 2: Escape Velocities and Cosmic Velocities
+### 🧠 Definitions
 
-## 🧠 Defining the First, Second, and Third Cosmic Velocities
-
-The **cosmic velocities** are the speeds needed to escape or orbit a celestial body. There are three important cosmic velocities:
-
-1. **First Cosmic Velocity**: The velocity needed to **orbit** a celestial body in a circular orbit at the surface level. This is also called the **orbital velocity**.
-
-   - Formula:
-   
+1. **First Cosmic Velocity**: Minimum speed for a circular orbit at the surface of a celestial body.
 $$
 v_1 = \sqrt{\frac{GM}{r}}
 $$
 
-Where:
-- $G$ is the gravitational constant,
-- $M$ is the mass of the central body (e.g., Earth, Mars, etc.),
-- $r$ is the radius of the celestial body.
-
-2. **Second Cosmic Velocity**: The velocity needed to **escape** the gravitational pull of a celestial body. This is also known as the **escape velocity**.
-
-   - Formula:
-   
+2. **Second Cosmic Velocity**: Escape velocity from a celestial body.
 $$
 v_2 = \sqrt{\frac{2GM}{r}}
 $$
 
-Where:
-- $r$ is the distance from the center of the celestial body,
-- $M$ is the mass of the celestial body,
-- $G$ is the gravitational constant.
+3. **Third Cosmic Velocity** (**Corrected**): Speed required to escape the **Sun’s** gravitational field from Earth orbit.
 
-3. **Third Cosmic Velocity**: The velocity required to **escape** the gravitational influence of the entire **solar system** or any star system. This velocity is needed to break free from the central star's gravitational pull.
+>❌ Incorrect:  
+>$$ v_3 = \sqrt{\frac{3GM}{r}} $$  
+>(This is not physically derived and must not be used.)
 
-   - Formula:
-   
-$$
-v_3 = \sqrt{\frac{3GM}{r}}
-$$
+>✅ Correct:
+>$$
+>v_3 = \sqrt{\frac{2GM_\text{Sun}}{r}}
+>$$
 
----
-
-## 🔬 Derivation of Each Velocity
-
-### 1. First Cosmic Velocity (Orbital Velocity)
-
-The **orbital velocity** is the velocity needed for an object to move in a stable circular orbit around a celestial body.
-
-- The centripetal force required for a circular orbit is provided by the gravitational force:
-
-$$
-F_c = \frac{mv^2}{r}, \quad F_g = \frac{GMm}{r^2}
-$$
-
-- Equating the forces:
-
-$$
-\frac{mv^2}{r} = \frac{GMm}{r^2}
-$$
-
-- Simplifying:
-
-$$
-v_1 = \sqrt{\frac{GM}{r}}
-$$
-
-### 2. Second Cosmic Velocity (Escape Velocity)
-
-The **escape velocity** is the speed needed to break free from the gravitational pull of a celestial body, without any additional propulsion.
-
-- The energy needed to escape is equal to the kinetic energy required to overcome the gravitational potential energy:
-
-$$
-\frac{1}{2}mv^2 = \frac{GMm}{r}
-$$
-
-- Solving for velocity:
-
-$$
-v_2 = \sqrt{\frac{2GM}{r}}
-$$
-
-### 3. Third Cosmic Velocity
-
-The **third cosmic velocity** is the velocity needed to escape the gravitational influence of the entire solar system or any other star system. It is derived from the concept of gravitational potential energy of the system.
-
-- Formula:
-
-$$
-v_3 = \sqrt{\frac{3GM}{r}}
-$$
+From Earth’s orbit:
+- $v_\text{Earth orbit} \approx 29.78$ km/s  
+- $v_3 \approx \sqrt{2} \cdot 29.78 \approx 42.1$ km/s
 
 ---
 
-## 🔍 Parameters Affecting the Cosmic Velocities
+## 📊 Summary Table: Velocities for Earth
 
-The cosmic velocities depend on two key parameters:
-
-1. **Mass ($M$) of the celestial body**: Larger masses increase the required velocities.
-2. **Radius ($r$) of the celestial body**: Larger radii (i.e., larger distances) reduce the required velocities.
-
----
-
-## 🌍 Calculating Escape and Orbital Velocities for Earth, Mars, and Jupiter
-
-Let's calculate the escape and orbital velocities for Earth, Mars, and Jupiter using the formulas derived above. The constants we'll use are:
-
-- **Gravitational constant** ($G$) = $6.67430 \times 10^{-11} \, \text{m}^3 \, \text{kg}^{-1} \, \text{s}^{-2}$
-- **Mass and radius of planets** (approximations):
-  - Earth: $M_\text{Earth} = 5.972 \times 10^{24} \, \text{kg}$, $r_\text{Earth} = 6.371 \times 10^6 \, \text{m}$
-  - Mars: $M_\text{Mars} = 0.64171 \times 10^{24} \, \text{kg}$, $r_\text{Mars} = 3.396 \times 10^6 \, \text{m}$
-  - Jupiter: $M_\text{Jupiter} = 1.898 \times 10^{27} \, \text{kg}$, $r_\text{Jupiter} = 6.991 \times 10^7 \, \text{m}$
+| Velocity Type         | Formula                        | Approx. Value |
+|-----------------------|--------------------------------|----------------|
+| First Cosmic Velocity | $v_1 = \sqrt{GM/r}$            | ~7.9 km/s      |
+| Second Cosmic Velocity| $v_2 = \sqrt{2GM/r}$           | ~11.2 km/s     |
+| Third Cosmic Velocity | $v_3 = \sqrt{2GM_\odot/r}$     | ~42.1 km/s     |
 
 ---
+
+## 🔍 Notes
+
+- All derivations assume **circular orbits** and **point mass central fields**.
+- Kepler's Law assumes a two-body system where one mass is significantly larger.
+- The third cosmic velocity depends on the **relative location** in the Sun's gravitational well, and cannot be universally simplified.
 
 ## 🧪 Python Code for Calculations and Visualization
 
-![alt text](image-1.png)
+![alt text](image-12.png)
 
 ---
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -303,3 +224,17 @@ plt.legend(loc='upper center', fontsize=10, frameon=True, shadow=True)
 plt.tight_layout()
 plt.show()
 ```
+
+
+
+
+## 📌 References
+
+- Newton, I. *Principia Mathematica*  
+- NASA: Planetary Fact Sheets  
+- OpenStax Physics Textbook 
+
+
+
+
+
