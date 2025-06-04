@@ -172,6 +172,333 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h1 id="equivalent-resistance-using-graph-theory">📘 Equivalent Resistance Using Graph Theory</h1>
+<h2 id="general-understanding-applies-to-both-options">🧠 General Understanding (Applies to Both Options)</h2>
+<p>To analyze and simplify circuits using <strong>graph theory</strong>, we first need to understand how to <strong>model an electrical circuit as a graph</strong> and how classical rules like <strong>series and parallel combinations</strong> map onto this model.</p>
+<hr/>
+<h3 id="circuit-as-a-graph">🔌 Circuit as a Graph</h3>
+<p>A circuit can be represented as a <strong>weighted undirected graph</strong>:</p>
+<ul>
+<li><strong>Nodes (Vertices)</strong>: Represent <strong>electrical junctions</strong> or connection points.</li>
+<li><strong>Edges</strong>: Represent <strong>resistors</strong>, where the <strong>edge weight</strong> equals the resistance value <span class="arithmatex">\(R\)</span> in ohms <span class="arithmatex">\((\Omega)\)</span>.</li>
+</ul>
+<h4 id="example-mapping">🔹 Example Mapping:</h4>
+<table>
+<thead>
+<tr>
+<th>Circuit Element</th>
+<th>Graph Element</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Junction</td>
+<td>Node <span class="arithmatex">\(v_i\)</span></td>
+<td>No resistance associated</td>
+</tr>
+<tr>
+<td>Resistor <span class="arithmatex">\(R\)</span></td>
+<td>Edge <span class="arithmatex">\(e_{ij}\)</span></td>
+<td>Connects nodes <span class="arithmatex">\(v_i \leftrightarrow v_j\)</span>, with weight <span class="arithmatex">\(R\)</span></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="series-and-parallel-in-graph-terms">🔁 Series and Parallel in Graph Terms</h3>
+<h4 id="series-connection">🔸 Series Connection:</h4>
+<p><img alt="alt text" src="../image.png"/></p>
+<hr/>
+<ul>
+<li>Two resistors <span class="arithmatex">\(R_1\)</span> and <span class="arithmatex">\(R_2\)</span> are in <strong>series</strong> if:</li>
+<li>They are connected end-to-end.</li>
+<li>There is <strong>no branching</strong> at the middle junction.</li>
+<li>In graph terms: a <strong>node with degree 2</strong> where both edges are resistors.</li>
+</ul>
+<p><strong>Equivalent Resistance</strong>:</p>
+<div class="arithmatex">\[
+R_{eq} = R_1 + R_2
+\]</div>
+<h4 id="parallel-connection">🔸 Parallel Connection:</h4>
+<p><img alt="alt text" src="../image-1.png"/></p>
+<hr/>
+<ul>
+<li>Two resistors <span class="arithmatex">\(R_1\)</span> and <span class="arithmatex">\(R_2\)</span> are in <strong>parallel</strong> if:</li>
+<li>Both ends of the resistors are connected to the <strong>same pair of nodes</strong>.</li>
+<li>In graph terms: <strong>multiple edges</strong> between the same two nodes.</li>
+</ul>
+<p><strong>Equivalent Resistance</strong>:</p>
+<div class="arithmatex">\[
+\frac{1}{R_{eq}} = \frac{1}{R_1} + \frac{1}{R_2}
+\quad \Rightarrow \quad
+R_{eq} = \left( \frac{1}{R_1} + \frac{1}{R_2} \right)^{-1}
+\]</div>
+<hr/>
+<h3 id="identifying-nested-series-parallel-combinations">🧩 Identifying Nested Series-Parallel Combinations</h3>
+<p>Nested combinations occur when series and parallel blocks are <strong>combined hierarchically</strong>, for example:</p>
+<ul>
+<li>A parallel block of resistors, each of which is itself a series of two resistors.</li>
+<li>A series of blocks, where each block is a parallel structure.</li>
+</ul>
+<h4 id="strategy-to-simplify">🔍 Strategy to Simplify:</h4>
+<ol>
+<li><strong>Recursively identify</strong> and reduce:</li>
+<li>Lowest-level series groups.</li>
+<li>Lowest-level parallel groups.</li>
+<li><strong>Replace</strong> each group with a single equivalent resistance.</li>
+<li>Repeat until the entire circuit is reduced to a single equivalent resistor between the source and destination.</li>
+</ol>
+<h4 id="tools-for-detection">🛠 Tools for Detection:</h4>
+<ul>
+<li><strong>Node Degree</strong>:</li>
+<li>Degree-2 nodes likely indicate series connections.</li>
+<li>
+<p>Multiple edges between nodes indicate parallel paths.</p>
+</li>
+<li>
+<p><strong>Graph Traversal</strong>:</p>
+</li>
+<li>DFS/BFS can help trace paths and identify reducible structures.</li>
+</ul>
+<hr/>
+<h3 id="summary">🧠 Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Graph Term</th>
+<th>Simplification Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Junction</td>
+<td>Node</td>
+<td>No resistance, used for connection</td>
+</tr>
+<tr>
+<td>Resistor</td>
+<td>Edge with weight <span class="arithmatex">\(R\)</span></td>
+<td>Carries resistance between two nodes</td>
+</tr>
+<tr>
+<td>Series connection</td>
+<td>Path through degree-2 node</td>
+<td><span class="arithmatex">\(R_{eq} = R_1 + R_2 + \dots\)</span></td>
+</tr>
+<tr>
+<td>Parallel connection</td>
+<td>Multi-edges between nodes</td>
+<td><span class="arithmatex">\(\frac{1}{R_{eq}} = \sum \frac{1}{R_i}\)</span></td>
+</tr>
+<tr>
+<td>Nested configurations</td>
+<td>Subgraphs</td>
+<td>Reduce inner groups first recursively</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h1 id="option-1-simplified-task-algorithm-description">📘 Option 1: Simplified Task – Algorithm Description</h1>
+<hr/>
+<h2 id="conceptual-overview">🧠 Conceptual Overview</h2>
+<p>To compute the <strong>equivalent resistance</strong> between two nodes in a circuit using <strong>graph theory</strong>, the goal is to reduce the graph by successively collapsing:</p>
+<ul>
+<li><strong>Series connections</strong> into single equivalent resistors</li>
+<li><strong>Parallel connections</strong> into a single equivalent resistor</li>
+<li><strong>Nested structures</strong> recursively</li>
+</ul>
+<p>The final output should be a single resistor representing the <strong>total resistance</strong> between the two terminals.</p>
+<hr/>
+<h2 id="key-concepts">🔍 Key Concepts</h2>
+<h3 id="graph-representation">🔸 Graph Representation</h3>
+<ul>
+<li>Each <strong>junction</strong> is a <strong>node</strong> <span class="arithmatex">\(v_i\)</span></li>
+<li>Each <strong>resistor</strong> is an <strong>edge</strong> <span class="arithmatex">\(e_{ij}\)</span> with weight <span class="arithmatex">\(R_{ij}\)</span></li>
+<li>The full circuit is a graph <span class="arithmatex">\(G = (V, E)\)</span> with:</li>
+<li><span class="arithmatex">\(V\)</span>: set of nodes</li>
+<li><span class="arithmatex">\(E\)</span>: set of edges with resistance weights</li>
+</ul>
+<hr/>
+<h3 id="series-connection-detection">🔸 Series Connection Detection</h3>
+<p><strong>Condition</strong>: A node <span class="arithmatex">\(v_k\)</span> has exactly <strong>two neighbors</strong> <span class="arithmatex">\(v_i\)</span> and <span class="arithmatex">\(v_j\)</span>, and:</p>
+<ul>
+<li>There is no other connection or branching at <span class="arithmatex">\(v_k\)</span></li>
+<li>Resistors <span class="arithmatex">\(R_1\)</span> and <span class="arithmatex">\(R_2\)</span> are connected as <span class="arithmatex">\(v_i - R_1 - v_k - R_2 - v_j\)</span></li>
+</ul>
+<p><strong>Combine</strong> into:</p>
+<div class="arithmatex">\[
+R_{eq} = R_1 + R_2
+\]</div>
+<h3 id="parallel-connection-detection">🔸 Parallel Connection Detection</h3>
+<p><strong>Condition</strong>: Multiple edges between the same pair of nodes <span class="arithmatex">\((v_i, v_j)\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(e_{ij}^{(1)}, e_{ij}^{(2)}, \dots, e_{ij}^{(n)}\)</span></li>
+</ul>
+<p><strong>Combine</strong> using:</p>
+<div class="arithmatex">\[
+\frac{1}{R_{eq}} = \sum_{k=1}^{n} \frac{1}{R_k}
+\]</div>
+<hr/>
+<h2 id="handling-nested-configurations">🧩 Handling Nested Configurations</h2>
+<p>Nested configurations are simplified by <strong>recursively</strong> applying the same logic:</p>
+<ul>
+<li><strong>Innermost groups</strong> are simplified first.</li>
+<li>As reductions occur, new series or parallel patterns may emerge.</li>
+<li>These are detected again in the next iteration.</li>
+</ul>
+<p><strong>Example</strong>:<br/>
+A resistor network like <code>((R1 + R2) || (R3 + R4)) + R5</code> is handled by:</p>
+<ol>
+<li>Reducing <span class="arithmatex">\(R_1 + R_2\)</span></li>
+<li>Reducing <span class="arithmatex">\(R_3 + R_4\)</span></li>
+<li>Applying parallel reduction</li>
+<li>Adding <span class="arithmatex">\(R_5\)</span></li>
+</ol>
+<hr/>
+<h2 id="cycles-and-branching">🔀 Cycles and Branching</h2>
+<p><strong>Cycles</strong> complicate the detection of series/parallel patterns.</p>
+<ul>
+<li>Basic series/parallel rules apply only to <strong>acyclic subgraphs</strong></li>
+<li>For graphs with cycles:</li>
+<li>Use <strong>graph traversal algorithms</strong> (DFS, BFS) to identify <strong>simplifiable substructures</strong></li>
+<li>Apply <strong>loop transformation rules</strong> like:<ul>
+<li><strong>Delta-Wye (Δ-Y) Transformations</strong></li>
+<li><strong>Kirchhoff’s laws</strong> in advanced versions</li>
+</ul>
+</li>
+</ul>
+<p>For now, this simplified algorithm <strong>does not handle arbitrary cycles</strong>; it's best suited for <strong>series-parallel graphs</strong>.</p>
+<hr/>
+<h2 id="summary_1">📌 Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Handled in Algorithm</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Series connections</td>
+<td>✅ Yes</td>
+<td>Node degree = 2, combine resistors</td>
+</tr>
+<tr>
+<td>Parallel connections</td>
+<td>✅ Yes</td>
+<td>Multiple edges between two nodes</td>
+</tr>
+<tr>
+<td>Nested combinations</td>
+<td>✅ Yes</td>
+<td>Recursive simplification</td>
+</tr>
+<tr>
+<td>Cycles</td>
+<td>❌ Basic only</td>
+<td>Requires advanced methods</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<pre><code class="language-python"># 📈 Series Connection Visualization (Structure Only)
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# Create a simple graph
+G = nx.Graph()
+
+# Define nodes
+nodes = ["A", "B", "C", "D"]  # 3 resistors: A-B, B-C, C-D
+G.add_nodes_from(nodes)
+
+# Define edges as series resistors
+edges = [("A", "B"), ("B", "C"), ("C", "D")]
+G.add_edges_from(edges)
+
+# Position nodes in a line (series layout)
+pos = {
+    "A": (0, 0),
+    "B": (1, 0),
+    "C": (2, 0),
+    "D": (3, 0)
+}
+
+# Draw the graph
+plt.figure(figsize=(8, 2))
+nx.draw(G, pos, with_labels=True, node_color="lightblue", node_size=1000, font_weight="bold")
+nx.draw_networkx_edges(G, pos, width=2)
+
+# Annotate edges with 'R' to indicate resistor (without values)
+for (u, v) in G.edges():
+    x = (pos[u][0] + pos[v][0]) / 2
+    y = (pos[u][1] + pos[v][1]) / 2 + 0.1
+    plt.text(x, y, "R", fontsize=12, ha="center", va="center")
+
+plt.title("Series Connection of Resistors (Structure Only)")
+plt.axis("off")
+plt.show()
+</code></pre>
+<pre><code class="language-python"># 🎨 Parallel Connection Visualization with Styled Colors
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# Create graph
+G = nx.Graph()
+
+# Define nodes
+nodes = ["A", "B", "R1", "R2", "R3"]
+G.add_nodes_from(nodes)
+
+# Add edges for 3 parallel paths from A to B
+G.add_edges_from([
+    ("A", "R1"), ("R1", "B"),
+    ("A", "R2"), ("R2", "B"),
+    ("A", "R3"), ("R3", "B")
+])
+
+# Define layout positions
+pos = {
+    "A": (0, 0),
+    "R1": (1.5, 1.5),
+    "R2": (1.5, 0),
+    "R3": (1.5, -1.5),
+    "B": (3, 0)
+}
+
+# Create figure
+plt.figure(figsize=(10, 5))
+plt.title("🌐 Parallel Connection of Resistors (Structure Only)", fontsize=16, fontweight='bold')
+
+# Draw nodes with cool colors
+node_colors = ["#00A9E0", "#7FDBFF", "#39CCCC", "#3D9970", "#0074D9"]
+nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=1200)
+
+# Draw edges with uniform color and thickness
+nx.draw_networkx_edges(G, pos, edge_color="#1F618D", width=3)
+
+# Draw labels
+nx.draw_networkx_labels(G, pos, font_size=12, font_weight="bold", font_color="white")
+
+# Annotate resistor edges with 'R'
+for r_node in ["R1", "R2", "R3"]:
+    # Left side label
+    x1 = (pos["A"][0] + pos[r_node][0]) / 2
+    y1 = (pos["A"][1] + pos[r_node][1]) / 2
+    plt.text(x1, y1 + 0.2, "R", fontsize=12, color="#154360", ha="center", va="center")
+
+    # Right side label
+    x2 = (pos["B"][0] + pos[r_node][0]) / 2
+    y2 = (pos["B"][1] + pos[r_node][1]) / 2
+    plt.text(x2, y2 + 0.2, "R", fontsize=12, color="#154360", ha="center", va="center")
+
+# Clean display
+plt.axis("off")
+plt.tight_layout()
+plt.show()
+</code></pre>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
