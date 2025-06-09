@@ -243,11 +243,11 @@ $$
 
 # 🎨 Visualization of Buffon's Needle Simulation
 
-![alt text](buffon_simulation.gif)
+![alt text](buffon_dynamic_pi.gif)
 
 ---
 
-![alt text](image-4.png)
+![alt text](image-5.png)
 
 ---
 
