@@ -6,7 +6,7 @@
 
 - **Materials Needed:**
   - A **string** (e.g., 1.4 m long).
-  - A **small weight** — *Compass embroidered necklace*.
+  - A **small weight** — *Compass embroidered string*.
   - A **stopwatch** or **smartphone timer**.
   - A **ruler or measuring tape** with millimeter (mm) resolution.
 
